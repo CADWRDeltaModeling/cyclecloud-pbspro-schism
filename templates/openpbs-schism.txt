@@ -75,69 +75,57 @@ Autoscale = $Autoscale
         PrivatePort = 8652
         PublicPort = 8652
 
-#        [[[volume sched]]]
-#        Size = 1024
-#        SSD = True
-#        Mount = builtinsched
-#         Persistent = False
+        [[[configuration cyclecloud.mounts.buildinshared]]]
+        type = nfs
+        mountpoint = /shared
+        export_path = $NFSSharedExportPath
+        address = $NFSAddress
+        options = $NFSSharedMountOptions
+	raid_level = 0
 
-#        [[[volume shared]]]
-#        Size = ${ifThenElse(NFSType == "Builtin", FilesystemSize, 2)}
-#        SSD = StandardSSD_LRS
-#        Mount = builtinshared
-#        Persistent = ${NFSType == "Builtin"}
-
-#        [[[configuration cyclecloud.mounts.builtinsched]]]
-#        mountpoint = /sched
-#        fs_type = xfs
-
-#        [[[configuration cyclecloud.mounts.builtinshared]]]
-#        disabled = ${NFSType != "Builtin"}
-#        mountpoint = /shared
-#        fs_type = xfs
-
-#        [[[configuration cyclecloud.exports.builtinsched]]]
-#        export_path = /sched
-#        options = no_root_squash
-#        samba.enabled = false
-#        type = nfs
-
-#        [[[configuration cyclecloud.exports.builtinshared]]]
-#        disabled = ${NFSType != "Builtin"}
-#        export_path = /shared
-#        samba.enabled = false
-#        type = nfs
+        [[[configuration cyclecloud.mounts.additional_nfs]]]
+        disabled = ${AdditionalNAS isnt true}
+        type = nfs
+        address = $AdditonalNFSAddress
+        mountpoint = $AdditionalNFSMountPoint
+        export_path = $AdditionalNFSExportPath
+        options = $AdditionalNFSMountOptions
 
         [[[volume nfs-1]]]
-        Size = $FilesystemSize 
-        SSD = True
-        Mount = nfs
-        Persistent = $FileSystemPersistence 
+        Size = $FilesystemSize
+        SSD = StandardSSD_LRS
+        Mount = nfs_shared
+        Persistent = $FileSystemPersistence
 
         [[[volume nfs-2]]]
         Size = $FilesystemSize
-        SSD = True
-        Mount = nfs
+        SSD = StandardSSD_LRS
+        Mount = nfs_shared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-3]]]
         Size = $FilesystemSize
-        SSD = True
-        Mount = nfs
+        SSD = StandardSSD_LRS
+        Mount = nfs_shared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-4]]]
         Size = $FilesystemSize
-        SSD = True
-        Mount = nfs
+        SSD = StandardSSD_LRS
+        Mount = nfs_shared
         Persistent = $FileSystemPersistence
 
-        [[[configuration cyclecloud.exports.builtinshared]]]
-        mountpoint = /shared
-        fs_type = $FileSystemType
-        raid_level = 0
+        [[[volume nfs-5]]]
+        Size = $FilesystemSize
+        SSD = StandardSSD_LRS
+        Mount = nfs_shared
+        Persistent = $FileSystemPersistence
 
-
+        [[[volume nfs-6]]]
+        Size = $FilesystemSize
+        SSD = StandardSSD_LRS
+        Mount = nfs_shared
+        Persistent = $FileSystemPersistence
 
     [[nodearray login]]
     InitialCount = $NumberLoginNodes
