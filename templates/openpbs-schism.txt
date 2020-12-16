@@ -3,9 +3,9 @@
 ## Cluster Configuration File ##
 ################################
 
-[cluster OpenPBS]
+[cluster OpenPBS-SCHISM]
 FormLayout = selectionpanel
-Category = Schedulers
+Category = Applications
 
 Autoscale = $Autoscale
 
@@ -42,9 +42,9 @@ Autoscale = $Autoscale
         address = $NFSAddress
         options = $NFSSharedMountOptions
 
-        [[[configuration cyclecloud.mounts.nfs_sched]]]
-        type = nfs
-        mountpoint = /sched
+#         [[[configuration cyclecloud.mounts.nfs_sched]]]
+#         type = nfs
+#         mountpoint = /sched
 
         [[[configuration cyclecloud.mounts.additional_nfs]]]
         disabled = ${AdditionalNAS isnt true}
@@ -62,7 +62,7 @@ Autoscale = $Autoscale
     AdditionalClusterInitSpecs = $serverClusterInitSpecs
     
         [[[configuration]]]
-        cyclecloud.mounts.nfs_sched.disabled = true
+#         cyclecloud.mounts.nfs_sched.disabled = true
         cyclecloud.mounts.nfs_shared.disabled = ${NFSType != "External"}
 
 
@@ -75,38 +75,67 @@ Autoscale = $Autoscale
         PrivatePort = 8652
         PublicPort = 8652
 
-        [[[volume sched]]]
-        Size = 1024
+#        [[[volume sched]]]
+#        Size = 1024
+#        SSD = True
+#        Mount = builtinsched
+#         Persistent = False
+
+#        [[[volume shared]]]
+#        Size = ${ifThenElse(NFSType == "Builtin", FilesystemSize, 2)}
+#        SSD = StandardSSD_LRS
+#        Mount = builtinshared
+#        Persistent = ${NFSType == "Builtin"}
+
+#        [[[configuration cyclecloud.mounts.builtinsched]]]
+#        mountpoint = /sched
+#        fs_type = xfs
+
+#        [[[configuration cyclecloud.mounts.builtinshared]]]
+#        disabled = ${NFSType != "Builtin"}
+#        mountpoint = /shared
+#        fs_type = xfs
+
+#        [[[configuration cyclecloud.exports.builtinsched]]]
+#        export_path = /sched
+#        options = no_root_squash
+#        samba.enabled = false
+#        type = nfs
+
+#        [[[configuration cyclecloud.exports.builtinshared]]]
+#        disabled = ${NFSType != "Builtin"}
+#        export_path = /shared
+#        samba.enabled = false
+#        type = nfs
+
+        [[[volume nfs-1]]]
+        Size = $FilesystemSize 
         SSD = True
-        Mount = builtinsched
-        Persistent = False
+        Mount = nfs
+        Persistent = $FileSystemPersistence 
 
-        [[[volume shared]]]
-        Size = ${ifThenElse(NFSType == "Builtin", FilesystemSize, 2)}
+        [[[volume nfs-2]]]
+        Size = $FilesystemSize
         SSD = True
-        Mount = builtinshared
-        Persistent = ${NFSType == "Builtin"}
+        Mount = nfs
+        Persistent = $FileSystemPersistence
 
-        [[[configuration cyclecloud.mounts.builtinsched]]]
-        mountpoint = /sched
-        fs_type = xfs
+        [[[volume nfs-3]]]
+        Size = $FilesystemSize
+        SSD = True
+        Mount = nfs
+        Persistent = $FileSystemPersistence
 
-        [[[configuration cyclecloud.mounts.builtinshared]]]
-        disabled = ${NFSType != "Builtin"}
-        mountpoint = /shared
-        fs_type = xfs
-
-        [[[configuration cyclecloud.exports.builtinsched]]]
-        export_path = /sched
-        options = no_root_squash
-        samba.enabled = false
-        type = nfs
+        [[[volume nfs-4]]]
+        Size = $FilesystemSize
+        SSD = True
+        Mount = nfs
+        Persistent = $FileSystemPersistence
 
         [[[configuration cyclecloud.exports.builtinshared]]]
-        disabled = ${NFSType != "Builtin"}
-        export_path = /shared
-        samba.enabled = false
-        type = nfs
+        mountpoint = /shared
+        fs_type = $FileSystemType
+        raid_level = 0
 
 
 
@@ -167,7 +196,7 @@ Order = 10
         Label = Execute VM Type
         Description = The VM type for execute nodes
         ParameterType = Cloud.MachineType
-        DefaultValue = Standard_F2s_v2
+        DefaultValue = Standard_HC44rs
         Config.Multiselect = true
 
 
@@ -240,16 +269,42 @@ Order = 15
         Description = NFS Client Mount Options
         Conditions.Hidden := NFSType != "External"
 
+
         [[[parameter FilesystemSize]]]
         Label = Size (GB)
         Description = The filesystem size
-        DefaultValue = 100
-
+        DefaultValue = 2048
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 10
         Config.MaxValue = 10240
         Config.IntegerOnly = true
         Conditions.Excluded := NFSType != "Builtin"
+
+        [[[parameter FileSystemType]]]
+        Label = Format
+        DefaultValue = ext4
+        Config.Plugin = pico.form.Dropdown
+            [[[[list Config.Entries]]]]
+            Name = xfs
+            Label = xfs
+            [[[[list Config.Entries]]]]
+            Name = ext3
+            Label = ext3
+            [[[[list Config.Entries]]]]
+            Name = ext4
+            Label = ext4
+
+        [[[parameter FileSystemPersistence]]]
+            Label = Filesystem Persistence
+            DefaultValue = true
+            Config.Plugin = pico.form.RadioButtonsControl
+            [[[[list Config.Entries]]]]
+            Name = false
+            Label = Ephemeral
+            [[[[list Config.Entries]]]]
+            Name = true
+            Label = Persistent
+
 
     [[parameters Additional NFS Mount]]
     Order = 20
