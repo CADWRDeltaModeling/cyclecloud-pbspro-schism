@@ -1,4 +1,3 @@
-
 ################################
 ## Cluster Configuration File ##
 ################################
@@ -32,15 +31,18 @@ Autoscale = $Autoscale
         cyclecloud.exports.defaults.samba.enabled = false      
         cshared.server.legacy_links_disabled = true
 
+        cyclecloud.cluster.autoscale.idle_time_after_jobs = 600
+        cyclecloud.cluster.autoscale.idle_time_before_jobs = 600
+
         [[[cluster-init cyclecloud/pbspro:default]]]
         Optional = false
 
-        [[[configuration cyclecloud.mounts.nfs_shared]]]
-        type = nfs
-        mountpoint = /shared
-        export_path = $NFSSharedExportPath
-        address = $NFSAddress
-        options = $NFSSharedMountOptions
+#         [[[configuration cyclecloud.mounts.nfs_shared]]]
+#         type = nfs
+#         mountpoint = /shared
+#         export_path = $NFSSharedExportPath
+#         address = $NFSAddress
+#         options = $NFSSharedMountOptions
 
 #         [[[configuration cyclecloud.mounts.nfs_sched]]]
 #         type = nfs
@@ -54,7 +56,6 @@ Autoscale = $Autoscale
         export_path = $AdditionalNFSExportPath
         options = $AdditionalNFSMountOptions
 
-
     [[node server]]
     ImageName = $SchedulerImageName
     MachineType = $serverMachineType
@@ -62,9 +63,8 @@ Autoscale = $Autoscale
     AdditionalClusterInitSpecs = $serverClusterInitSpecs
     
         [[[configuration]]]
-#         cyclecloud.mounts.nfs_sched.disabled = true
+        cyclecloud.mounts.nfs_sched.disabled = true
         cyclecloud.mounts.nfs_shared.disabled = ${NFSType != "External"}
-
 
         [[[cluster-init cyclecloud/pbspro:server]]]
         
@@ -75,65 +75,74 @@ Autoscale = $Autoscale
         PrivatePort = 8652
         PublicPort = 8652
 
-        [[[configuration cyclecloud.mounts.buildinshared]]]
-        type = nfs
-        mountpoint = /shared
-        export_path = $NFSSharedExportPath
-        address = $NFSAddress
-        options = $NFSSharedMountOptions
-	raid_level = 0
-
-        [[[configuration cyclecloud.mounts.additional_nfs]]]
-        disabled = ${AdditionalNAS isnt true}
-        type = nfs
-        address = $AdditonalNFSAddress
-        mountpoint = $AdditionalNFSMountPoint
-        export_path = $AdditionalNFSExportPath
-        options = $AdditionalNFSMountOptions
-
         [[[volume nfs-1]]]
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
-        Mount = nfs_shared
+        Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-2]]]
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
-        Mount = nfs_shared
+        Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-3]]]
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
-        Mount = nfs_shared
+        Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-4]]]
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
-        Mount = nfs_shared
+        Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-5]]]
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
-        Mount = nfs_shared
+        Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-6]]]
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
-        Mount = nfs_shared
+        Mount = builtinshared
         Persistent = $FileSystemPersistence
+
+#        [[[configuration cyclecloud.mounts.builtinsched]]]
+#        mountpoint = /sched
+#        fs_type = xfs
+
+        [[[configuration cyclecloud.mounts.builtinshared]]]
+        disabled = ${NFSType != "Builtin"}
+        mountpoint = /shared
+        fs_type =  $FileSystemType
+        raid_level = 0
+
+#        [[[configuration cyclecloud.exports.builtinsched]]]
+#        export_path = /sched
+#        options = no_root_squash
+#        samba.enabled = false
+#        type = nfs
+
+        [[[configuration cyclecloud.exports.builtinshared]]]
+        disabled = ${NFSType != "Builtin"}
+        export_path = /shared
+        samba.enabled = false
+        type = nfs
+
+
 
     [[nodearray login]]
     InitialCount = $NumberLoginNodes
     MachineType = $serverMachineType
         
 	[[[cluster-init cyclecloud/pbspro:login]]]
-    [[[configuration]]]
-    autoscale.disabled = true
+
+        [[[configuration]]]
+        autoscale.disabled = true
 
     [[nodearray execute]]
     MachineType = $ExecuteMachineType
@@ -257,11 +266,11 @@ Order = 15
         Description = NFS Client Mount Options
         Conditions.Hidden := NFSType != "External"
 
-
         [[[parameter FilesystemSize]]]
         Label = Size (GB)
         Description = The filesystem size
         DefaultValue = 2048
+
         Config.Plugin = pico.form.NumberTextBox
         Config.MinValue = 10
         Config.MaxValue = 10240
