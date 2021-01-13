@@ -37,12 +37,12 @@ Autoscale = $Autoscale
         [[[cluster-init cyclecloud/pbspro:default]]]
         Optional = false
 
-#         [[[configuration cyclecloud.mounts.nfs_shared]]]
-#         type = nfs
-#         mountpoint = /shared
-#         export_path = $NFSSharedExportPath
-#         address = $NFSAddress
-#         options = $NFSSharedMountOptions
+        [[[configuration cyclecloud.mounts.nfs_shared]]]
+        type = nfs
+        mountpoint = /shared
+        export_path = $NFSSharedExportPath
+        address = $NFSAddress
+        options = $NFSSharedMountOptions
 
 #         [[[configuration cyclecloud.mounts.nfs_sched]]]
 #         type = nfs
