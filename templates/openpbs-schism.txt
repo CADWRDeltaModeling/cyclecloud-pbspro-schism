@@ -150,7 +150,7 @@ Autoscale = $Autoscale
 
     Interruptible = $UseLowPrio
     AdditionalClusterInitSpecs = $ExecuteClusterInitSpecs
-
+    EnableAcceleratedNetworking = false
 
         [[[configuration]]]
         autoscale.disabled = ${Autoscale == False}
@@ -291,7 +291,6 @@ Order = 15
             [[[[list Config.Entries]]]]
             Name = ext4
             Label = ext4
-    EnableAcceleratedNetworking = false
 
         [[[parameter FileSystemPersistence]]]
             Label = Filesystem Persistence
