@@ -31,8 +31,8 @@ Autoscale = $Autoscale
         cyclecloud.exports.defaults.samba.enabled = false      
         cshared.server.legacy_links_disabled = true
 
-        cyclecloud.cluster.autoscale.idle_time_after_jobs = 600
-        cyclecloud.cluster.autoscale.idle_time_before_jobs = 600
+        cyclecloud.cluster.autoscale.idle_time_after_jobs = 720
+        cyclecloud.cluster.autoscale.idle_time_before_jobs = 720
 
         [[[cluster-init cyclecloud/pbspro:default]]]
         Optional = false
@@ -61,6 +61,7 @@ Autoscale = $Autoscale
     MachineType = $serverMachineType
     IsReturnProxy = $ReturnProxy
     AdditionalClusterInitSpecs = $serverClusterInitSpecs
+    EnableAcceleratedNetworking = false
     
         [[[configuration]]]
         cyclecloud.mounts.nfs_sched.disabled = true
@@ -76,36 +77,35 @@ Autoscale = $Autoscale
         PublicPort = 8652
 
         [[[volume nfs-1]]]
+        disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-2]]]
+        disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-3]]]
+        disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-4]]]
+        disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-5]]]
-        Size = $FilesystemSize
-        SSD = StandardSSD_LRS
-        Mount = builtinshared
-        Persistent = $FileSystemPersistence
-
-        [[[volume nfs-6]]]
+        disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
         SSD = StandardSSD_LRS
         Mount = builtinshared
@@ -281,6 +281,7 @@ Order = 15
         Label = Format
         DefaultValue = ext4
         Config.Plugin = pico.form.Dropdown
+        Conditions.Excluded := NFSType != "Builtin"
             [[[[list Config.Entries]]]]
             Name = xfs
             Label = xfs
@@ -290,11 +291,13 @@ Order = 15
             [[[[list Config.Entries]]]]
             Name = ext4
             Label = ext4
+    EnableAcceleratedNetworking = false
 
         [[[parameter FileSystemPersistence]]]
             Label = Filesystem Persistence
             DefaultValue = true
             Config.Plugin = pico.form.RadioButtonsControl
+            Conditions.Excluded := NFSType != "Builtin"
             [[[[list Config.Entries]]]]
             Name = false
             Label = Ephemeral
@@ -367,21 +370,21 @@ Order = 20
         Label = Scheduler OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = cycle.image.centos8
+        DefaultValue = /subscriptions/c15db114-26b5-454c-b8f4-8a5eb5f16796/resourceGroups/dwrbdo_slr_rg/providers/Microsoft.Compute/images/schism-compiler-image-20210312141414
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.centos8"}
 
         [[[parameter ImageName]]]
         Label = Compute OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = cycle.image.centos8
+        DefaultValue = /subscriptions/c15db114-26b5-454c-b8f4-8a5eb5f16796/resourceGroups/dwrbdo_slr_rg/providers/Microsoft.Compute/images/schism-compiler-image-20210312141414
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.centos8"}
 
         [[[parameter PBSVersion]]]
         Label = PBS Version
         Config.Plugin = pico.form.Dropdown
         Config.Entries := {[Label="OpenPBS v20, el8-only"; Value="20.0.1-0"], [Label="PBSPro v18, el7-only"; Value="18.1.4-0"]}
-        DefaultValue = 20.0.1-0
+        DefaultValue = 18.1.4-0
 
         [[[parameter serverClusterInitSpecs]]]
         Label = Server Cluster-Init
