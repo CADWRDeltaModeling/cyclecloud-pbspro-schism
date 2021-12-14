@@ -61,7 +61,7 @@ Autoscale = $Autoscale
     MachineType = $serverMachineType
     IsReturnProxy = $ReturnProxy
     AdditionalClusterInitSpecs = $serverClusterInitSpecs
-    EnableAcceleratedNetworking = false
+    EnableAcceleratedNetworking = true
     
         [[[configuration]]]
         cyclecloud.mounts.nfs_sched.disabled = true
@@ -150,7 +150,7 @@ Autoscale = $Autoscale
 
     Interruptible = $UseLowPrio
     AdditionalClusterInitSpecs = $ExecuteClusterInitSpecs
-    EnableAcceleratedNetworking = false
+    EnableAcceleratedNetworking = $AcceleratedNetworking
 
         [[[configuration]]]
         autoscale.disabled = ${Autoscale == False}
@@ -428,3 +428,9 @@ Order = 20
         ParameterType = Boolean
         Config.Label = Access execute nodes from the Internet
         Conditions.Excluded := UsePublicNetwork isnt true
+
+        [[[parameter AcceleratedNetworking]]]
+        Label = Accelerated Networking
+        DefaultValue = true
+        ParameterType = Boolean
+        Config.Label = Enable accelerated networking (SR-IOV) for the execute array
