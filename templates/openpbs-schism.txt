@@ -19,7 +19,7 @@ Autoscale = $Autoscale
         [[[cluster-init cyclecloud/pbspro:default]]]
         Optional = false
 
-        [[[cluster-init pbspro:default:1.4.0]]]
+        [[[cluster-init schism:default:1.1.0]]]
 
         [[[configuration]]]
         pbspro.version = $PBSVersion
@@ -367,21 +367,21 @@ Order = 20
         Label = Scheduler OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = OpenLogic:CentOS-HPC:7_9-gen2:7.9.2021052401
+        DefaultValue = OpenLogic:CentOS-HPC:8_1-gen2:8.1.2021042001
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.centos8"}
 
         [[[parameter ImageName]]]
         Label = Compute OS
         ParameterType = Cloud.Image
         Config.OS = linux
-        DefaultValue = OpenLogic:CentOS-HPC:7_9-gen2:7.9.2021052401
+        DefaultValue = OpenLogic:CentOS-HPC:8_1-gen2:8.1.2021042001
         Config.Filter := Package in {"cycle.image.centos7", "cycle.image.centos8"}
 
         [[[parameter PBSVersion]]]
         Label = PBS Version
         Config.Plugin = pico.form.Dropdown
         Config.Entries := {[Label="OpenPBS v20, el8-only"; Value="20.0.1-0"], [Label="PBSPro v18, el7-only"; Value="18.1.4-0"]}
-        DefaultValue = 18.1.4-0
+        DefaultValue = 20.0.1-0
 
         [[[parameter serverClusterInitSpecs]]]
         Label = Server Cluster-Init

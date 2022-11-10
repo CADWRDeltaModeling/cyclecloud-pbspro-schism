@@ -16,6 +16,7 @@ repo_gpgcheck=1
 gpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
 EOF
 mv /tmp/oneAPI.repo /etc/yum.repos.d
+rpm --import https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
 yum-config-manager --enable oneAPI
 
 INTEL_VERSION=2021.2.0
