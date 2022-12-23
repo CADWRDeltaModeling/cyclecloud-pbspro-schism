@@ -77,35 +77,35 @@ Autoscale = $Autoscale
         [[[volume nfs-1]]]
         disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
-        SSD = StandardSSD_LRS
+        StorageAccountType = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-2]]]
         disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
-        SSD = StandardSSD_LRS
+        StorageAccountType = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-3]]]
         disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
-        SSD = StandardSSD_LRS
+        StorageAccountType = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-4]]]
         disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
-        SSD = StandardSSD_LRS
+        StorageAccountType = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
         [[[volume nfs-5]]]
         disabled = ${NFSType != "Builtin"}
         Size = $FilesystemSize
-        SSD = StandardSSD_LRS
+        StorageAccountType = StandardSSD_LRS
         Mount = builtinshared
         Persistent = $FileSystemPersistence
 
