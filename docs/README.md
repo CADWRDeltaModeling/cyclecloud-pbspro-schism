@@ -1,4 +1,6 @@
-# Introduction
+# How to create a CycleCloud cluster computer for SCHISM on Azure
+
+## Introduction
 
 Generally, there are five steps in preparing CycleCloud and virtual SCHISM cluster computers, with some of them being one-time tasks.
 
@@ -8,7 +10,7 @@ Generally, there are five steps in preparing CycleCloud and virtual SCHISM clust
 4. Create a cluster.
 5. Run SCHISM.
 
-# Create a CycleCloud App
+## Create a CycleCloud App
 CycleCloud is an online application (or tool) to create and manage virtual cluster computers in Azure. Microsoft Documents for CycleCloud can be found at [Azure CycleCloud Documentation - Azure CycleCloud - Microsoft Learn](https://learn.microsoft.com/en-us/azure/cyclecloud/?view=cyclecloud-8).
 
 To create a CycleCloud app, follow a Microsoft documentation from here, [Quickstart - Install via Marketplace - Azure CycleCloud - Microsoft Learn](https://learn.microsoft.com/en-us/azure/cyclecloud/qs-install-marketplace?view=cyclecloud-8).
@@ -19,10 +21,10 @@ The user will be asked to create a CycleCloud Web admin account and to provide s
 
 It is recommended to provide an SSH public key when the first user account is created. This CycleCloud user account and a set of SSH key will be used later to log in to cluster computers, thus please keep the SSH key set. (You can generate SSH keys and store through the Azure portal as well: [Create SSH keys in the Azure portal - Azure Virtual Machines - Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/ssh-keys-portal).)
 
-# Import CycleCloud SCHISM Project
+## Import CycleCloud SCHISM Project
 A CycleCloud project is a recipe to create a cluster from a template. To create a cluster for SCHISM easily, a CycleCloud project is customized. The project is available at [GitHub, CADWRDeltaModeling/cyclecloud-pbspro-schism: Example Azure CycleCloud PBSpro cluster type](https://github.com/CADWRDeltaModeling/cyclecloud-pbspro-schism).
 
-## Initialize CycleCloud
+### Initialize CycleCloud
 To use a CycleCloud project, a user needs to log (SSH) into the CycleCloud server command line environment and to initialize the CycleCloud service. A CycleCloud server (VM) admin account, not the CycleCloud Web admin account) and a key (text key inside a file) are necessary. The initialization is needed only once.
 
 Run a command shown below to initialize CycleCloud (Note that $ denotes a prompt. Do not type it):
@@ -37,7 +39,7 @@ This step will set up locker information. Get the locker name for later use:
 
 Please refer to the CycleCloud CLI (Command Line Interface) documentation at [Azure CycleCloud CLI Reference - Azure CycleCloud - Microsoft Learn](https://learn.microsoft.com/en-us/azure/cyclecloud/cli?view=cyclecloud-8#cyclecloud-initialize) for more information about it.
 
-## Import the SCHISM CycleCloud project
+### Import the SCHISM CycleCloud project
 To create a cluster that is ready to run SCHISM, the CycleCloud-PBSPro-SCHISM project can be imported into CycleCloud Service. Please refer to a [Microsoft document about CycleCloud project from Projects - Azure CycleCloud - Microsoft Learn](https://learn.microsoft.com/en-us/azure/cyclecloud/how-to/projects?view=cyclecloud-8) for more information.
 
 First, log (SSH) into the CycleCloud server. Download one of SCHISM CycleCloud project files (source code file in zip or tar.gz, ) from a [GitHub release page at Release CycleCloud-PBSPro SCHISM Project v1.3.8_v5.8 Intel 2022.2 MPI · CADWRDeltaModeling/cyclecloud-pbspro-schism (github.com)](https://github.com/CADWRDeltaModeling/cyclecloud-pbspro-schism/releases/tag/v5.8.0-schism) and unpack it.
@@ -55,7 +57,7 @@ Import the project template to the CycleCloud service.
 
 Now OpenPBS-SCHISM should show up in the list of cluster templates.
 
-# Create a Cluster
+## Create a Cluster
 Open the CycleCloud Web in a browser. Log into the CycleCloud web interface with the admin account of the CycleCloud Web.
 
 Click ‘+’ icon at the lower left corner. Choose ‘OpenPBS-SCHISM’ at the bottom of the list.
@@ -89,7 +91,7 @@ Now a new cluster will show up in the list of the cluster computers. Choose one 
 
 ![Start a cluster](picture10.png)
 
-# Launch a SCHISM simulation
+## Launch a SCHISM simulation
 Once a server node is created, i.e. provisioned, and is running, it would behave just like any other Linux server. You may need the SSH private key when the first user account of the CycleCloud Web is created. If you can log (SSH) into the server node, it is ready to use and to launch SCHISM runs. To find out how to connect to the server node, select the server node in the node list first, and click ‘Connect’ below when the server node information shows up. A pop-up window will appear with an instruction and an IP address of the server node similar to a screenshot shown below. (Note that your connection information will be different from the example below.)
 
 ![Choose the server node](picture11.png)
