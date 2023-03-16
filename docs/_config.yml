@@ -1,0 +1,12 @@
+plugins:
+  - jekill-relative-links
+relative_links:
+  enabled: true
+  collections: true
+  permalinks: true
+include:
+  - README.md
+title: How to create a CycleCloud cluster computer for SCHISM on Azure
+description: How to create a customized cluster computer for SCHISM on Azure using CycleCloud and run SCHISM on it
+
+theme: jekyll-theme-cayman
